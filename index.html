@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>War Room Board</title>
+<style>
+:root{--bg:#F3F4F6;--panel:#FFFFFF;--ink:#14181F;--muted:#5E6673;--line:#DADDE3;--ok:#16884F;--bad:#C63A31;--warn:#B26A00;
+  --nfl:#B8901A;--nba:#E8731C;--cbb:#2F8FE8;--cfb:#2E8B4A;--nhl:#CE1126;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1116;--panel:#171B22;--ink:#E8EAEE;--muted:#9AA3AF;--line:#2A303A;--ok:#3CC783;--bad:#FF6B5E;--warn:#F0B04A;
+  --nfl:#E3BE4C;--nba:#FF9445;--cbb:#5AAEFF;--cfb:#4FC27A;--nhl:#FF4D5E;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px}
+h1{font:400 30px/1.15 Georgia,"Times New Roman",serif;margin:0 0 6px}
+.take{max-width:75ch;margin:0 0 14px}.take b{font-variant-numeric:tabular-nums}
+.stamp{font-size:12px;color:var(--muted);margin:0 0 16px}
+nav{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px}
+nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font:inherit;padding:8px 12px;cursor:pointer;margin-bottom:-1px}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+button:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+h2{font-size:18px;margin:26px 0 4px}h2:first-child{margin-top:0}
+.sub{font-size:13px;color:var(--muted);margin:0 0 10px;max-width:75ch}
+.row{position:relative;display:grid;grid-template-columns:minmax(140px,1.1fr) 1fr 1.1fr 1.2fr 1.6fr;gap:14px;background:var(--panel);border:1px solid var(--line);
+  border-radius:10px;padding:14px 16px 14px 24px;margin-bottom:8px;overflow:hidden}
+.row::before,.head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:var(--room)}
+.row>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.abbr{font:400 34px/1 Georgia,serif;color:var(--room)}
+.lab{font-size:12px;color:var(--muted)}.small{font-size:12.5px;color:var(--muted)}
+.big{font:400 26px/1.1 Georgia,serif;font-variant-numeric:tabular-nums}.mid{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+.pill{align-self:flex-start;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-top:6px}
+.pill.live{color:var(--ok);border-color:var(--ok)}
+.up{color:var(--ok)}.down{color:var(--bad)}.warn{color:var(--warn)}
+a{color:var(--room,var(--ink));font-weight:600;text-decoration:none}a:hover{text-decoration:underline}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.picks button{font:400 20px Georgia,serif;cursor:pointer;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--room);border-radius:10px;padding:8px 16px}
+.picks button[aria-pressed=true]{background:var(--room);color:#fff;border-color:var(--room)}
+.head{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 16px 16px 26px;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.head>div{display:flex;flex-direction:column;gap:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+.kv{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:6px 14px;margin:0;font-size:13.5px}.kv dt{color:var(--muted)}.kv dd{margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tw{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td:first-child{white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.empty{color:var(--muted);padding:14px}
+.tag{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:0 6px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--room)}
+.W{color:var(--ok);font-weight:600}.L{color:var(--bad);font-weight:600}
+.filters{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.bars .b{display:grid;grid-template-columns:44px 1fr 96px;align-items:center;gap:8px;margin:6px 0;font-size:13px}
+.bars .track{position:relative;height:18px}.bars .fill{position:absolute;top:0;height:18px;border-radius:3px;background:var(--room)}
+.bars .zero{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+svg text{fill:var(--muted);font-size:11px}
+details{margin-top:30px;font-size:13px;color:var(--muted)}details p{max-width:75ch}
+[data-room=NFL]{--room:var(--nfl)}[data-room=NBA]{--room:var(--nba)}[data-room=CBB]{--room:var(--cbb)}[data-room=CFB]{--room:var(--cfb)}[data-room=NHL]{--room:var(--nhl)}
+@media (max-width:780px){.row{grid-template-columns:1fr 1fr}.row .id{grid-column:1/-1}.row .gate{grid-column:1/-1}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>War Room Board</h1>
+  <p class="take" id="take">Loading…</p>
+  <p class="stamp" id="stamp"></p>
+  <nav id="tabs" role="tablist">
+    <button role="tab" data-tab="overview" aria-selected="true">Overview</button>
+    <button role="tab" data-tab="sports" aria-selected="false">Sports</button>
+    <button role="tab" data-tab="openbets" aria-selected="false">Open bets</button>
+    <button role="tab" data-tab="compare" aria-selected="false">Compare</button>
+    <button role="tab" data-tab="fixlog" aria-selected="false">Fix log</button>
+  </nav>
+
+  <section id="overview" class="page">
+    <div id="board"></div>
+    <h2>Best picks on the board right now</h2>
+    <p class="sub">The 10 highest-EV picks across all five rooms' current cards, bet or not.</p>
+    <div class="tw"><table id="t-top"></table></div>
+  </section>
+
+  <section id="sports" class="page" hidden>
+    <div class="picks" id="picks"></div>
+    <div class="head" id="sp-head"></div>
+    <h2>Highlights</h2><div class="card" id="sp-high"></div>
+    <h2>Open bets</h2><div class="tw"><table id="t-sp-open"></table></div>
+    <h2>Current card</h2><p class="sub">Every pick the model shows right now, and why skipped ones were skipped.</p><div class="tw"><table id="t-sp-picks"></table></div>
+    <h2>Graded in the last two weeks</h2><div class="tw"><table id="t-sp-recent"></table></div>
+    <h2>How each bet type is doing</h2><div class="tw"><table id="t-sp-types"></table></div>
+    <div class="grid2"><div><h2>Favorite team</h2><div class="card" id="sp-focus"></div></div><div><h2>Fantasy</h2><div id="sp-fantasy"></div></div></div>
+  </section>
+
+  <section id="openbets" class="page" hidden>
+    <h2>Every open bet, all five rooms</h2>
+    <p class="sub">Live bets use the paper bankroll; shadow and test bets are graded at $0.</p>
+    <div class="filters">
+      <select id="f-sport" aria-label="Room"><option value="">All rooms</option><option>NFL</option><option>NBA</option><option>CBB</option><option>CFB</option><option>NHL</option></select>
+      <select id="f-mode" aria-label="Type"><option value="">Live and shadow</option><option value="live">Live only</option><option value="shadow">Shadow and tests only</option></select>
+    </div>
+    <div class="tw"><table id="t-open"></table></div>
+  </section>
+
+  <section id="compare" class="page" hidden>
+    <h2>All five side by side</h2>
+    <p class="sub">ROI = profit ÷ the $1,000 start. Win % leaves out pushes. CLV units differ by room, so read each against zero.</p>
+    <div class="tw"><table id="t-cmp"></table></div>
+    <div class="grid2">
+      <div><h2>Profit or loss by room</h2><div class="card bars" id="b-profit"></div></div>
+      <div><h2>Where your money is right now</h2><div class="card bars" id="b-risk"></div></div>
+    </div>
+    <h2>Bankroll after each run</h2><p class="sub">Dashed line = $1,000 start.</p><div class="card" id="hist"></div>
+    <h2>Every bet type across all rooms</h2><p class="sub">Best ROI first. Trust a type more once it has 50+ bets and positive CLV.</p><div class="tw"><table id="t-types"></table></div>
+  </section>
+
+  <section id="fixlog" class="page" hidden>
+    <h2>Latest fixes and rule changes</h2><div class="tw"><table id="t-fixes"></table></div>
+  </section>
+
+  <details><summary>What these numbers mean</summary>
+    <p>Bankroll is paper money; every room started at $1,000. Shadow rooms grade bets at $0 until their live switch passes.</p>
+    <p>Closing-line value (CLV) asks whether the line moved your way after you bet; it is the best early sign of a real edge. "Not beating the close yet" = average CLV at or below zero.</p>
+    <p>This page is a read-only copy. It refreshes after each War Room run.</p>
+  </details>
+</div>
+<script>
+(function(){
+const SPORTS=['NFL','NBA','CBB','CFB','NHL'];
+const $=s=>document.querySelector(s);
+const el=(t,cls,txt)=>{const e=document.createElement(t);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;};
+const num=v=>v==null||v===''?null:+v;
+const money=v=>(v<0?'−':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const signed=v=>(v>0?'+':v<0?'−':'')+'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=v=>v==null?'':(+v).toFixed(1)+'%';
+const price=v=>v==null?'':((+v>0?'+':'')+Math.round(+v));
+const clvTxt=(v,u)=>v==null?'':((+v>0?'+':'')+(String(u||'').startsWith('pct')?(+v).toFixed(1)+'%':(+v).toFixed(2)+(u?' pts':'')));
+const verdict=(clv,known)=>clv==null?'Too early to tell':clv<=0?'Not beating the close yet':known<50?'Promising, not proven':'Beating the close';
+const safeUrl=u=>/^https?:\/\//.test(String(u||''))?String(u):null;
+let D=null,state={sport:'NFL',fs:'',fm:''};
+
+function table(t,cols,rows,empty){t.replaceChildren();const th=t.createTHead().insertRow();
+  for(const c of cols){const h=el('th',c.n?'n':'',c.l);th.appendChild(h);}
+  const b=t.createTBody();
+  if(!rows.length){const td=b.insertRow().insertCell();td.colSpan=cols.length;td.className='empty';td.textContent=empty;return;}
+  for(const r of rows){const tr=b.insertRow();for(const c of cols){const td=tr.insertCell();if(c.n)td.className='n';const v=r[c.f];
+    if(c.f==='sport'){const d=el('span','dot');d.dataset.room=v;td.append(d,String(v));}
+    else if(c.f==='result'){td.textContent=v??'';td.classList.add(String(v));}
+    else if(c.tag){if(v!=null&&v!=='')td.appendChild(el('span','tag',String(v)));}
+    else td.textContent=c.fmt?c.fmt(v,r):(v??'');}}}
+const C={sport:{f:'sport',l:'Room'},starts:{f:'starts',l:'Starts'},game:{f:'game',l:'Game'},pick:{f:'pick',l:'Pick'},price:{f:'price',l:'Price',n:1,fmt:price},
+  stake:{f:'stake_usd',l:'Stake',n:1,fmt:v=>v==null?'':money(+v)},mode:{f:'mode',l:'Type',tag:1},ev:{f:'ev_pct',l:'EV',n:1,fmt:pct},model:{f:'model_pct',l:'Model',n:1,fmt:pct},
+  bet:{f:'bet',l:'Bet?',tag:1},why:{f:'why_not',l:'Why not'},graded:{f:'graded',l:'Graded'},result:{f:'result',l:'Result'},
+  profit:{f:'profit_usd',l:'Profit',n:1,fmt:v=>v==null?'':signed(+v)},clv:{f:'clv',l:'CLV',n:1,fmt:(v,r)=>clvTxt(v,r.clv_unit)}};
+
+function compareRows(){return D.rooms.map(r=>{const w=+r.wins||0,l=+r.losses||0,p=+r.pushes||0,profit=Math.round((+r.bankroll-+r.start_bankroll)*100)/100;
+  const ob=D.open_bets.filter(b=>b.sport===r.sport),risk=ob.filter(b=>String(b.mode).toLowerCase()==='live').reduce((a,b)=>a+(+b.stake_usd||0),0);
+  const types=D.by_type.filter(t=>t.sport===r.sport&&(+t.bets||0)>0).sort((a,b)=>(+b.profit_usd||0)-(+a.profit_usd||0));
+  const lab=t=>t?t.type+' ('+signed(+t.profit_usd||0)+')':'';
+  return {sport:r.sport,status:r.status,bankroll:+r.bankroll,profit,roi:profit/(+r.start_bankroll)*100,win:w+l?w/(w+l)*100:null,graded:w+l+p,
+    clv:clvTxt(r.clv,r.clv_unit)||'none yet',verdict:verdict(num(r.clv),+r.clv_known||0),open:ob.length||(+r.open_bets||0),risk,best:lab(types[0]),worst:types.length>1?lab(types[types.length-1]):''};});}
+
+function overview(){
+  const tb=D.rooms.reduce((a,r)=>a+(+r.bankroll),0),ts=D.rooms.reduce((a,r)=>a+(+r.start_bankroll),0);
+  const live=D.open_bets.filter(b=>String(b.mode).toLowerCase()==='live').reduce((a,b)=>a+(+b.stake_usd||0),0);
+  const withC=D.rooms.filter(r=>r.clv!=null),beat=withC.filter(r=>+r.clv>0).length;
+  const t=$('#take');t.replaceChildren('Your five War Rooms hold ',el('b',null,money(tb)),' in paper money, ',el('b',null,(tb-ts>=0?'up ':'down ')+money(Math.abs(tb-ts))),
+    ' versus the $5,000 they started with. ',el('b',null,money(live)),' is riding on live open bets. ',
+    withC.length?(beat+' of '+withC.length+' rooms with closing-line data '+(beat===1?'is':'are')+' beating the close'+(beat?'.':', so the profits so far are most likely luck.')):'No room has closing-line data yet.');
+  $('#stamp').textContent='Data built '+new Date(D.generated).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+'.';
+  const board=$('#board');board.replaceChildren();
+  for(const r of D.rooms){const a=el('article','row');a.dataset.room=r.sport;const profit=+r.bankroll-+r.start_bankroll,v=verdict(num(r.clv),+r.clv_known||0);
+    const id=el('div','id');id.append(el('span','abbr',r.sport));const pl=el('span','pill'+(r.status==='live'?' live':''),r.status==='live'?'Live bankroll':'Shadow (no money yet)');id.append(pl);
+    const m=el('div');m.append(el('span','lab','Bankroll'),el('span','big',money(+r.bankroll)),el('span','small '+(profit>0?'up':profit<0?'down':''),signed(profit)+' since $1,000 start'));
+    const rec=el('div');rec.append(el('span','lab','Record'),el('span','mid',(+r.wins||0)+'-'+(+r.losses||0)+'-'+(+r.pushes||0)),el('span','small',r.record_note||''));
+    const c=el('div');c.append(el('span','lab','Closing-line value'),el('span','mid',r.clv==null?'No close yet':clvTxt(r.clv,r.clv_unit)),
+      el('span','small '+(v.startsWith('Not')?'warn':/^(Beat|Prom)/.test(v)?'up':''),v),el('span','small','Known on '+(r.clv_known??'n/a')+' of '+(r.clv_of??'n/a')+' bets'));
+    const g=el('div','gate');g.append(el('span','lab','Next milestone'),el('span','small',r.gate||''),el('span','small',(r.open_bets??0)+' open bets. Updated '+(r.updated||'?')));const lk=el('a',null,'Open the full '+r.sport+' War Room');lk.href='./'+r.sport.toLowerCase()+'/';g.append(lk);
+    a.append(id,m,rec,c,g);board.append(a);}
+  table($('#t-top'),[C.sport,C.starts,C.game,C.pick,C.price,C.ev,C.bet],D.picks_today.filter(p=>p.ev_pct!=null).sort((a,b)=>b.ev_pct-a.ev_pct).slice(0,10),'No cards saved yet.');
+}
+
+function sport(){
+  const s=state.sport,r=D.rooms.find(x=>x.sport===s),ex=D.exports.find(x=>x.sport===s)||{},cr=compareRows().find(x=>x.sport===s);
+  for(const b of document.querySelectorAll('#picks button'))b.setAttribute('aria-pressed',String(b.dataset.room===s));
+  const h=$('#sp-head');h.dataset.room=s;h.replaceChildren();
+  const box=(l,v,c)=>{const d=el('div');d.append(el('span','lab',l),el('span',c||'mid',v));h.append(d);return d;};
+  const t=box(r.status==='live'?'Live bankroll':'Shadow, no money yet',s,'abbr');t.append(el('span','small','Updated '+(r.updated||'?')+(ex.has_export?'':'. No export yet')));const lk=el('a',null,'Open the full '+s+' War Room');lk.href='./'+s.toLowerCase()+'/';t.append(lk);
+  box('Bankroll',money(+r.bankroll),'big');box('Profit since start',signed(cr.profit),'mid '+(cr.profit>0?'up':cr.profit<0?'down':''));box('ROI',pct(cr.roi));
+  box('Record',cr.graded?((+r.wins||0)+'-'+(+r.losses||0)+'-'+(+r.pushes||0)):'0-0-0');box('Closing-line value',cr.clv);box('Verdict',cr.verdict,'small');
+  const g=box('Next milestone',r.gate||'','small');g.style.gridColumn='1/-1';
+  const empty=ex.has_export?'None right now.':'Nothing saved yet.';
+  const kv=(id,src,title)=>{const c=$(id);c.replaceChildren();const rows=D[src].filter(x=>x.sport===s);
+    if(title&&ex.focus_team)c.append(el('p','mid',ex.focus_team));
+    if(!rows.length){c.append(el('p','small',empty));return;}const dl=el('dl','kv');for(const x of rows)dl.append(el('dt',null,x.label||''),el('dd',null,x.value||''));c.append(dl);};
+  kv('#sp-high','highlights');kv('#sp-focus','focus',1);
+  const f=x=>x.sport===s;
+  table($('#t-sp-open'),[C.starts,C.game,C.pick,C.price,C.stake,C.mode,C.ev],D.open_bets.filter(f).sort((a,b)=>String(a.starts||'').localeCompare(String(b.starts||''))),empty);
+  table($('#t-sp-picks'),[C.starts,C.game,C.pick,C.price,C.model,C.ev,C.bet,C.why],D.picks_today.filter(f),empty);
+  table($('#t-sp-recent'),[C.graded,C.game,C.pick,C.price,C.stake,C.result,C.profit,C.clv,C.mode],D.recent_bets.filter(f),empty);
+  table($('#t-sp-types'),[{f:'type',l:'Bet type'},C.mode,{f:'bets',l:'Bets',n:1},{f:'wins',l:'W',n:1},{f:'losses',l:'L',n:1},C.profit,{f:'roi_pct',l:'ROI',n:1,fmt:pct},{f:'avg_clv',l:'Avg CLV',n:1,fmt:(v,r)=>clvTxt(v,r.clv_unit)},{f:'clv_known',l:'CLV known',n:1}],
+    D.by_type.filter(f).sort((a,b)=>(+b.profit_usd||0)-(+a.profit_usd||0)),empty);
+  const fz=$('#sp-fantasy');fz.replaceChildren();
+  if(s!=='NFL'&&s!=='NBA'){fz.append(el('p','small',s+' has no fantasy league.'));}
+  else{const rows=D.fantasy.filter(f);if(!rows.length)fz.append(el('p','small',empty));
+    for(const x of rows){const c=el('div','card');c.style.marginBottom='8px';c.append(el('p','mid',(x.league||'')+(x.team?', '+x.team:'')));const dl=el('dl','kv');
+      const fl=s==='NFL'?[['record','Record'],['standing','Standing'],['this_week','This week'],['start_sit','Start/sit'],['waivers','Waivers'],['notes','Notes']]:[['record','Record'],['standing','Standing'],['this_week','This week'],['notes','Notes']];
+      for(const [k,l] of fl)if(x[k])dl.append(el('dt',null,l),el('dd',null,x[k]));c.append(dl);fz.append(c);}}
+}
+
+function openbets(){let rows=D.open_bets.filter(r=>(!state.fs||r.sport===state.fs)&&(!state.fm||(state.fm==='live'?String(r.mode).toLowerCase()==='live':String(r.mode).toLowerCase()!=='live')));
+  rows=rows.sort((a,b)=>String(a.starts||'').localeCompare(String(b.starts||'')));
+  table($('#t-open'),[C.sport,C.starts,C.game,C.pick,C.price,C.stake,C.mode,C.ev],rows,'No open bets match.');}
+
+function bars(id,rows,key,fmt){const c=$(id);c.replaceChildren();const vals=rows.map(r=>r[key]);
+  if(key==='risk'&&vals.every(v=>!v)){c.append(el('p','small','No live stakes right now.'));return;}
+  const lo=Math.min(0,...vals),hi=Math.max(0,...vals)||1,sp=hi-lo,z=(0-lo)/sp*100;
+  for(const r of rows){const b=el('div','b');b.dataset.room=r.sport;const tr=el('div','track');const f=el('div','fill');const v=r[key];
+    const a=((Math.min(v,0)-lo)/sp)*100,w=Math.abs(v)/sp*100;f.style.left=a+'%';f.style.width=Math.max(w,0.5)+'%';const zz=el('div','zero');zz.style.left=z+'%';tr.append(zz,f);
+    b.append(el('span',null,r.sport),tr,el('span','n',fmt(v)));c.append(b);}}
+
+function drawHistory(){const c=$('#hist');c.replaceChildren();const pts=D.history.filter(h=>h.bankroll!=null).map(h=>({...h,t:Date.parse(h.date+'T12:00:00Z')})).filter(h=>!isNaN(h.t));
+  if(!pts.length){c.append(el('p','small','No runs logged yet.'));return;}
+  const W=Math.max(300,c.clientWidth-32),H=230,L=58,R=12,T=10,B=26;let t0=Math.min(...pts.map(p=>p.t)),t1=Math.max(...pts.map(p=>p.t));if(t0===t1){t0-=864e5;t1+=864e5;}
+  const lo=Math.min(950,...pts.map(p=>p.bankroll)),hi=Math.max(1050,...pts.map(p=>p.bankroll));
+  const x=t=>L+(t-t0)/(t1-t0)*(W-L-R),y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+  const NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.setAttribute('width','100%');svg.setAttribute('role','img');svg.setAttribute('aria-label','Bankroll by room after each run');
+  const mk=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);svg.append(e);return e;};
+  for(let i=0;i<=4;i++){const v=lo+(hi-lo)*i/4;mk('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:'currentColor','stroke-opacity':.12});const tx=mk('text',{x:L-6,y:y(v)+4,'text-anchor':'end'});tx.textContent='$'+Math.round(v).toLocaleString();}
+  mk('line',{x1:L,x2:W-R,y1:y(1000),y2:y(1000),stroke:'currentColor','stroke-opacity':.5,'stroke-dasharray':'4 4'});
+  const days=[...new Set(pts.map(p=>p.date))].sort();const step=Math.ceil(days.length/6);days.forEach((d,i)=>{if(i%step)return;const tx=mk('text',{x:x(Date.parse(d+'T12:00:00Z')),y:H-6,'text-anchor':'middle'});tx.textContent=new Date(d+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});});
+  const col=s=>getComputedStyle(document.documentElement).getPropertyValue('--'+s.toLowerCase()).trim();
+  for(const s of SPORTS){const a=pts.filter(p=>p.sport===s).sort((p,q)=>p.t-q.t);if(!a.length)continue;
+    mk('polyline',{points:a.map(p=>x(p.t)+','+y(p.bankroll)).join(' '),fill:'none',stroke:col(s),'stroke-width':2});
+    for(const p of a){const ci=mk('circle',{cx:x(p.t),cy:y(p.bankroll),r:4.5,fill:col(s)});const tt=document.createElementNS(NS,'title');tt.textContent=s+' '+p.date+': '+money(p.bankroll);ci.append(tt);}}
+  c.append(svg);const lg=el('p','small',SPORTS.join('  ·  '));c.append(lg);}
+
+function compare(){const rows=compareRows();
+  table($('#t-cmp'),[C.sport,{f:'status',l:'Status'},{f:'bankroll',l:'Bankroll',n:1,fmt:v=>money(v)},{f:'profit',l:'Profit',n:1,fmt:v=>signed(v)},{f:'roi',l:'ROI',n:1,fmt:pct},
+    {f:'win',l:'Win %',n:1,fmt:pct},{f:'graded',l:'Graded',n:1},{f:'clv',l:'CLV',n:1},{f:'verdict',l:'Verdict'},{f:'open',l:'Open',n:1},{f:'risk',l:'At risk',n:1,fmt:v=>money(v)},
+    {f:'best',l:'Best bet type'},{f:'worst',l:'Worst bet type'}],rows,'');
+  bars('#b-profit',rows,'profit',signed);bars("#b-risk",rows,"risk",money);drawHistory();
+  table($('#t-types'),[C.sport,{f:'type',l:'Bet type'},C.mode,{f:'bets',l:'Bets',n:1},{f:'wins',l:'W',n:1},{f:'losses',l:'L',n:1},C.profit,{f:'roi_pct',l:'ROI',n:1,fmt:pct},{f:'avg_clv',l:'Avg CLV',n:1,fmt:(v,r)=>clvTxt(v,r.clv_unit)}],
+    D.by_type.slice().sort((a,b)=>(b.roi_pct??-1e9)-(a.roi_pct??-1e9)),'No bet-type results saved yet.');}
+
+function fixes(){table($('#t-fixes'),[{f:'date',l:'Date'},{f:'room',l:'Room'},{f:'kind',l:'Type'},{f:'change',l:'Change'}],D.fixes,'No fixes yet.');}
+
+function show(id){for(const p of document.querySelectorAll('.page'))p.hidden=p.id!==id;for(const b of document.querySelectorAll('#tabs button'))b.setAttribute('aria-selected',String(b.dataset.tab===id));
+  if(window.history.replaceState)window.history.replaceState(null,'','#'+id);if(id==='compare')compare();}
+for(const b of document.querySelectorAll('#tabs button'))b.addEventListener('click',()=>show(b.dataset.tab));
+const pk=$('#picks');for(const s of SPORTS){const b=el('button',null,s);b.dataset.room=s;b.addEventListener('click',()=>{state.sport=s;sport();});pk.append(b);}
+$('#f-sport').addEventListener('change',e=>{state.fs=e.target.value;openbets();});$('#f-mode').addEventListener('change',e=>{state.fm=e.target.value;openbets();});
+
+fetch('hub.json?'+Date.now()).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}).then(d=>{D=d;
+  D.rooms.sort((a,b)=>SPORTS.indexOf(a.sport)-SPORTS.indexOf(b.sport));
+  overview();sport();openbets();fixes();const h=location.hash.slice(1);if(h&&document.getElementById(h))show(h);
+}).catch(e=>{$('#take').textContent='Could not load the data ('+e.message+'). Try refreshing in a minute.';});
+})();
+</script>
+</body>
+</html>
